@@ -7,13 +7,13 @@ import SeparadorFuncoes as sep
 sep.modoSaida = 'a'
 versao = 1
 pasta_versao = f'V_{versao}'
-pasta_catalogados = os.path.join('Catalogados')
+pasta_catalogados = os.path.join('TRANSFORMER/Catalogados')
 os.mkdir(f'{pasta_catalogados}') if not os.path.isdir(f'{pasta_catalogados}') else None
 os.mkdir(f'{pasta_catalogados}/{pasta_versao}') if not os.path.isdir(f'{pasta_catalogados}/{pasta_versao}') else None
 sep.diretorioSaida = f'./{pasta_catalogados}/{pasta_versao}/'
 
 #entrada = open(config.saida_Filtro, 'r', encoding='UTF-8')
-entrada = open(f'Prompt/{pasta_versao}/Saida{versao}_Filtrado.txt', 'r', encoding='UTF-8')
+entrada = open(f'TRANSFORMER/Prompt/{pasta_versao}/Saida{versao}_Filtrado.txt', 'r', encoding='UTF-8')
 sep.init()
 
 endPointList = [

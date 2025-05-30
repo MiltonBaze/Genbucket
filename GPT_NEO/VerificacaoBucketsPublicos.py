@@ -7,10 +7,21 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import requests
 
+# Função para pegar o tamanho do arquivo via requisição HTTP
+def get_file_size(url):
+    try:
+        response = requests.head(url)
+        if 'Content-Length' in response.headers:
+            return int(response.headers['Content-Length'])
+        else:
+            return None  # Se o tamanho do arquivo não for encontrado
+    except requests.RequestException:
+        return None  # Caso ocorra algum erro na requisição
+    
 # -------------- VERIFICAR ------------- #
 import config_buckets as config
 arqConfig = os.path.join('config_buckets.py')
-pasta_servidor = os.path.join('Catalogados')
+pasta_servidor = os.path.join('GPT_NEO\Catalogados')
 #pasta_drive = os.path.join('H:/Meu Drive/Mestrado Milton/LSTM')
 # -------------------------------------- #
 

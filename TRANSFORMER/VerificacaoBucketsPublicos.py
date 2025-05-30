@@ -10,8 +10,8 @@ import requests
 # -------------- VERIFICAR ------------- #
 import config_buckets as config
 arqConfig = os.path.join('config_buckets.py')
-pasta_servidor = os.path.join('Catalogados')
-#pasta_drive = os.path.join('H:/Meu Drive/Mestrado Milton/LSTM')
+pasta_servidor = os.path.join('TRANSFORMER/Catalogados')
+#pasta_drive = os.path.join('H:/Meu Drive/Mestrado Milton/TRANSFORMER')
 # -------------------------------------- #
 
 def sair(sair=False):
