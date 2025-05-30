@@ -1,0 +1,6 @@
+{
+  "dataset_path": "dados/buckets.txt",
+  "modelo": "TRANSFORMER",
+  "validar_buckets": true,
+  "modo_automatico": true
+}

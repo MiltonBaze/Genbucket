@@ -1,0 +1,6 @@
+{
+  "dataset_path": "dados/buckets.txt",
+  "modelo": "GPT_NEO",
+  "validar_buckets": true,
+  "modo_automatico": true
+}
