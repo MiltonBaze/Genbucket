@@ -3,7 +3,7 @@ import sys
 import json
 import requests
 import subprocess
-# teste123
+
 # Variáveis globais
 dataset_escolhido = None
 modelo_escolhido = None
@@ -209,7 +209,7 @@ def executar_modo_automatico():
     print(f"✅ Modelo: {modelo_escolhido}")
 
     if config.get("validar_buckets", False):
-        print("🔍 Validando buckets...")
+        print(" Validando buckets...")
         buckets_validados = validar_buckets_do_dataset(dataset_escolhido)
         salvar_em_arquivo(arquivo_validados, buckets_validados)
         print(f"✅ {len(buckets_validados)} buckets válidos salvos em '{arquivo_validados}'")
