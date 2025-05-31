@@ -1,0 +1,2 @@
+tem.s3.amazonaws.com - provedor s3:
+  js: 6 arquivos

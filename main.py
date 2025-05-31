@@ -131,7 +131,7 @@ def rodar_codigo():
     if os.path.exists(arquivo_gerados):
         print(f"\n✅ Buckets gerados foram salvos em: {arquivo_gerados}")
     else:
-        print("⚠️ Nenhum bucket gerado foi encontrado.")
+        print(" Nenhum bucket gerado foi encontrado.")
 
 def executar_validador_e_verificador(validador_path, verificador_path):
     try:
@@ -147,6 +147,9 @@ def executar_validador_e_verificador(validador_path, verificador_path):
         print("✅ Verificação de conteúdo concluída.")
     except subprocess.CalledProcessError as e:
         print(f"❌ Erro ao executar o verificador: {e}")
+        
+def executar_analise_publicos(script_analise):
+    subprocess.run(["python", script_analise], check=True)
 
 def executar_modelo_externo(modelo, dataset_path):
     base_path = r"F:\Mestrado\Codigo_Fonte_Genbucket\GetBucket"
@@ -155,15 +158,18 @@ def executar_modelo_externo(modelo, dataset_path):
         "LSTM": os.path.join(base_path, "LSTM", "LSTM.py"),
         "LSTM_VALIDACAO": os.path.join(base_path, "LSTM", "validador_buckets.py"),
         "LSTM_VERIFICACAO": os.path.join(base_path, "LSTM", "verificadorBucketspublicos.py"),
+        "LSTM_ANALISA_PUBLICOS": os.path.join(base_path, "LSTM", "Analisa_Publico.py"),
 
         "GPT_NEO_TREINAMENTO": os.path.join(base_path, "GPT_neo", "Treinamento.py"),
         "GPT_NEO_GERADOR": os.path.join(base_path, "GPT_neo", "GPT_Gerador.py"),
         "GPT_NEO_VALIDACAO": os.path.join(base_path, "GPT_neo", "validador_buckets.py"),
         "GPT_NEO_VERIFICACAO": os.path.join(base_path, "GPT_neo", "verificadorBucketspublicos.py"),
+        "GPT_NEO_ANALISA_PUBLICOS": os.path.join(base_path, "GPT_neo", "Analisa_Publico.py"),
 
         "TRANSFORMER": os.path.join(base_path, "TRANSFORMER", "transformer.py"),
         "TRANSFORMER_VALIDACAO": os.path.join(base_path, "TRANSFORMER", "validador_buckets.py"),
         "TRANSFORMER_VERIFICACAO": os.path.join(base_path, "TRANSFORMER", "verificadorBucketspublicos.py"),
+        "TRANSFORMER_ANALISA_PUBLICOS": os.path.join(base_path, "TRANSFORMER", "Analisa_Publico.py"),
     }
 
     try:
@@ -171,14 +177,18 @@ def executar_modelo_externo(modelo, dataset_path):
             subprocess.run(["python", scripts["GPT_NEO_TREINAMENTO"], dataset_path], check=True)
             subprocess.run(["python", scripts["GPT_NEO_GERADOR"], dataset_path], check=True)
             executar_validador_e_verificador(scripts["GPT_NEO_VALIDACAO"], scripts["GPT_NEO_VERIFICACAO"])
-
+            executar_analise_publicos(scripts["GPT_NEO_ANALISA_PUBLICOS"])
+            
         elif modelo == "TRANSFORMER":
             subprocess.run(["python", scripts["TRANSFORMER"], dataset_path], check=True)
             executar_validador_e_verificador(scripts["TRANSFORMER_VALIDACAO"], scripts["TRANSFORMER_VERIFICACAO"])
+            executar_analise_publicos(scripts["TRANSFORMER_ANALISA_PUBLICOS"])
 
         elif modelo == "LSTM":
             subprocess.run(["python", scripts["LSTM"], dataset_path], check=True)
             executar_validador_e_verificador(scripts["LSTM_VALIDACAO"], scripts["LSTM_VERIFICACAO"])
+            executar_analise_publicos(scripts["LSTM_ANALISA_PUBLICOS"])
+
 
         else:
             print(f"❌ Modelo '{modelo}' não reconhecido.")
