@@ -152,7 +152,9 @@ def executar_analise_publicos(script_analise):
     subprocess.run(["python", script_analise], check=True)
 
 def executar_modelo_externo(modelo, dataset_path):
-    base_path = r"F:\Mestrado\Codigo_Fonte_Genbucket\GenBucket"
+   # base_path = r"F:\Mestrado\Codigo_Fonte_Genbucket\GenBucket"
+    base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "GenBucket"))
+    
 
     scripts = {
         "LSTM": os.path.join(base_path, "LSTM", "LSTM.py"),
