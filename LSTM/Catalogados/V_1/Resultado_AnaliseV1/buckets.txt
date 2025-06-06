@@ -1,0 +1,7 @@
+anemia.s3.amazonaws.com - provedor s3:
+  js: 105 arquivos
+  xml: 6 arquivos
+  json: 3 arquivos
+  html: 10 arquivos
+arba.s3.amazonaws.com - provedor s3:
+  html: 1 arquivos
