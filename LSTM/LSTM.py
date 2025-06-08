@@ -28,6 +28,9 @@ if not os.path.exists(dataset_path):
 script_dir = os.path.dirname(__file__)
 prompt_base_dir = os.path.join(script_dir, "Prompt")
 config_path = os.path.join(script_dir, "config.json")
+modelo_dir = os.path.join(script_dir, "ModelosIA")
+modelo_nome = "modelo_IA_64U_200E_0.001LR_0.2TS_23RS_1NUMERO.keras"
+modelo_path = os.path.join(modelo_dir, modelo_nome)
 
 # === Carrega configurações do arquivo JSON ===
 if not os.path.exists(config_path):
@@ -49,11 +52,14 @@ tokenizer = Tokenizer(char_level=True)
 tokenizer.fit_on_texts(baseDeTreinamento)
 sequencias = tokenizer.texts_to_sequences(baseDeTreinamento)
 tamanho_maximo_sequencia = max([len(seq) for seq in sequencias])
-modelo = Sequential()
+modelo = None
 
 def treinamento(Variables: VarIA):
-    global ultimoTreinamento
+    global ultimoTreinamento, modelo
+
     unidades, epocas, taxaAprendizagem, tamanhoDeConjuntoTeste, AleatoridadeDaDivisao = Variables.get()
+
+    print(" Iniciando treinamento do modelo...")
 
     sequencias_uniformes = pad_sequences(sequencias, maxlen=tamanho_maximo_sequencia, padding='post')
     X = sequencias_uniformes[:, :-1]
@@ -62,6 +68,7 @@ def treinamento(Variables: VarIA):
     X_treinamento, X_teste, y_treinamento, y_teste = train_test_split(
         X, y, test_size=tamanhoDeConjuntoTeste, random_state=AleatoridadeDaDivisao)
 
+    modelo = Sequential()
     modelo.add(Embedding(input_dim=len(tokenizer.word_index) + 1, output_dim=64))
     modelo.add(LSTM(units=unidades, return_sequences=True))
     modelo.add(Dense(len(tokenizer.word_index) + 1, activation='softmax'))
@@ -70,17 +77,13 @@ def treinamento(Variables: VarIA):
     modelo.fit(X_treinamento, y_treinamento, epochs=epocas, validation_data=(X_teste, y_teste))
     ultimoTreinamento += 1
 
-    # Cria o diretório ModelosIA se não existir
-    modelo_dir = os.path.join(script_dir, "ModelosIA")
     if not os.path.exists(modelo_dir):
         os.makedirs(modelo_dir)
 
-    modelo_path = os.path.join(modelo_dir, f"modelo_IA_{Variables.getName(ultimoTreinamento)}.keras")
     modelo.save(modelo_path)
+    print(f"✅ Modelo treinado e salvo em: {modelo_path}")
 
 def gerar_nome(Variaveis, caracter_inicial, tamanhoLimite=60):
-    modelo_path = os.path.join(script_dir, "ModelosIA", f"modelo_IA_{Variaveis.getName(ultimoTreinamento)}.keras")
-    modelo = load_model(modelo_path)
     palavra_saida = caracter_inicial
 
     while len(palavra_saida) < tamanhoLimite:
@@ -112,9 +115,15 @@ if __name__ == '__main__':
         config_json["aleatoriedade_divisao"]
     )
 
-    if input('Deseja Treinar? (s/N)? ').lower() == 's':
+    # === Verifica e carrega ou treina modelo ===
+    if os.path.exists(modelo_path):
+        print(f"✅ Modelo encontrado. Carregando de: {modelo_path}")
+        modelo = load_model(modelo_path)
+    else:
+        print("❌ Modelo não encontrado. Será treinado agora.")
         treinamento(VariaveisIA)
 
+    # === Geração dos nomes ===
     novosBuckets = 0
     fase = 1
     conjuntoSemRepeticao = set(sorted(baseDeTreinamento))
