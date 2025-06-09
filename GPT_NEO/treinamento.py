@@ -10,14 +10,18 @@ from transformers import (
     Trainer
 )
 
-# === Carrega configuração do JSON de forma segura ===
+# === Caminhos base e config.json ===
 base_path = os.path.dirname(__file__)
 config_path = os.path.join(base_path, "config.json")
+
+if not os.path.exists(config_path):
+    print("❌ Arquivo 'config.json' não encontrado.")
+    sys.exit(1)
 
 with open(config_path, "r", encoding="utf-8") as f:
     config = json.load(f)
 
-# === Verifica se o dataset foi passado ===
+# === Verifica se dataset foi informado ===
 if len(sys.argv) < 2:
     print("❌ Caminho do dataset não informado.")
     sys.exit(1)
@@ -28,24 +32,40 @@ if not os.path.exists(file_path):
     print(f"❌ Arquivo de treinamento não encontrado: {file_path}")
     sys.exit(1)
 
-# === Caminhos dinâmicos ===
-base_de_dados = os.path.splitext(os.path.basename(file_path))[0]
-base_path = os.path.dirname(__file__)
-output_dir = os.path.join(base_path, config["treinamento_dir"], f"{base_de_dados}_config_json")
-save_model = os.path.join(base_path, config["modelo_treinado_dir"], f"{base_de_dados}_config_json")
+# === Define caminhos baseados no nome do dataset ===
+nome_base = os.path.splitext(os.path.basename(file_path))[0]
+output_dir = os.path.join(base_path, config["treinamento_dir"], f"{nome_base}_config_json")
+save_model = os.path.join(base_path, config["modelo_treinado_dir"], f"{nome_base}_config_json")
+
+# === Verifica se o modelo já foi treinado (todos os arquivos esperados) ===
+arquivos_esperados = [
+    "model.safetensors",
+    "training_args.bin",
+    "generation_config.json",
+    "config.json"
+]
+
+modelo_completo_ja_salvo = all([
+    os.path.exists(os.path.join(save_model, arquivo)) for arquivo in arquivos_esperados
+])
+
+if modelo_completo_ja_salvo:
+    print(f"✅ Modelo completo já treinado encontrado em: {save_model}")
+    print("ℹ️  Encerrando o script (sem treinar novamente).")
+    sys.exit(0)
 
 # === Cria diretórios se necessário ===
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(save_model, exist_ok=True)
 
-# === Modelo e Tokenizer ===
-print(" Carregando modelo e tokenizer...")
+# === Carrega modelo e tokenizer ===
+print("Carregando modelo e tokenizer...")
 modelo = GPTNeoForCausalLM.from_pretrained(config["model_name"])
 tokenizer = GPT2Tokenizer.from_pretrained(config["model_name"])
 tokenizer.pad_token = tokenizer.eos_token
 
-# === Dataset ===
-print(f" Carregando dataset: {file_path}")
+# === Prepara dataset ===
+print(f"Carregando dataset: {file_path}")
 dataset = TextDataset(
     tokenizer=tokenizer,
     file_path=file_path,
@@ -58,7 +78,7 @@ data_collator = DataCollatorForLanguageModeling(
     mlm=False
 )
 
-# === Argumentos de treino ===
+# === Argumentos de treinamento ===
 args = TrainingArguments(
     output_dir=output_dir,
     overwrite_output_dir=True,
@@ -70,8 +90,8 @@ args = TrainingArguments(
     logging_steps=100
 )
 
-# === Trainer ===
-print(" Iniciando treinamento...")
+# === Inicia o Trainer ===
+print("Iniciando treinamento...")
 trainer = Trainer(
     model=modelo,
     args=args,
@@ -81,6 +101,8 @@ trainer = Trainer(
 
 trainer.train()
 
-# === Salva modelo ===
-print(f"💾 Salvando modelo treinado em: {save_model}")
+# === Salva modelo treinado ===
+print(f"Salvando modelo treinado em: {save_model}")
 trainer.save_model(save_model)
+
+print("✅ Treinamento finalizado e modelo salvo.")
