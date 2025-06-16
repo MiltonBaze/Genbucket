@@ -1,0 +1,12 @@
+{
+  "nessus": {
+    "host": "https://localhost:8834",
+    "username": "milton",
+    "password": "milton123"
+  },
+  "qualys": {
+    "host": "https://qualysapi.qualys.com",
+    "username": "usuario_qualys",
+    "password": "senha_qualys"
+  }
+}
