@@ -18,6 +18,10 @@ verificar buckets publicos
 python executores/verificar_buckets_publicos.py --config config_gpt.json
 python executores/verificar_buckets_publicos.py --config config_lstm.json
 ------------------------------------------------------------------------------
+Analisar - Programas Externo
+python executores/analise_vulnerabilidade_v1.py --config config_gpt.json
+python executores/analise_vulnerabilidade_v1.py --config config_lstm.json
+python executores/analise_vulnerabilidade_v1.py --config config_transformer.json
 
-python executores/analisar_vulnerabilidades_api.py --config config_gpt.jso
+------------------------------------------------------------------------------
 
