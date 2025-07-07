@@ -1,18 +1,37 @@
 import os
+import sys
+import json
+import argparse
 import re
 from urllib.parse import urlparse
 from collections import defaultdict, Counter
 
-def analise_conteudo(self):
-    modelo = self.config.get("modelo", "desconhecido")
-    print(f"🔍 Iniciando análise de conteúdo dos buckets ({modelo})...")
+# Garante que o diretório raiz esteja no sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+def carregar_modelo(nome_modelo: str, config: dict):
+    if nome_modelo == "gpt-neo":
+        from modelos.gptneo.gpt_neo_model import GPTNeoModel
+        return GPTNeoModel(config)
+    elif nome_modelo == "lstm":
+        from modelos.lstm.lstm_model import LSTMModel
+        return LSTMModel(config)
+    elif nome_modelo == "transformer":
+        from modelos.transformer.transformer_model import TransformerModel
+        return TransformerModel(config)
+    else:
+        raise ValueError(f"Modelo desconhecido: {nome_modelo}")
+
+def executar_analise_conteudo(modelo):
+    catalogados_dir = modelo.catalogados_dir
+    modelo_nome = modelo.config.get("modelo", "desconhecido")
+
+    print(f"🔍 Iniciando análise de conteúdo dos buckets ({modelo_nome})...")
 
     extensoes_desejadas = {
         "js", "mjs", "cjs", "jsx", "ts", "tsx", "xml",
         "json", "html", "php", "asp", "aspx", "jsp", "svg"
     }
-
-    catalogados_dir = self.catalogados_dir
 
     if not os.path.isdir(catalogados_dir):
         print(f"❌ Diretório não encontrado: {catalogados_dir}")
@@ -24,13 +43,12 @@ def analise_conteudo(self):
 
         if os.path.isdir(caminho_publico) and nome_versao.lower().startswith('v_'):
             numero_versao = nome_versao.lower().replace('v_', '')
-            pasta_resultado = os.path.join(caminho_versao, f'Resultado_AnaliseV{numero_versao}')
+            pasta_resultado = os.path.join(caminho_versao, f"Resultado_AnaliseV{numero_versao}")
             arquivo_saida = os.path.join(pasta_resultado, 'resultado.txt')
             arquivo_buckets = os.path.join(pasta_resultado, 'buckets.txt')
             caminho_extensoes = os.path.join(pasta_resultado, 'extensoes_contagem.txt')
 
             contagem = defaultdict(int)
-            tamanho_total = defaultdict(int)
             buckets = defaultdict(lambda: defaultdict(int))
             extensoes_total = Counter()
 
@@ -58,14 +76,11 @@ def analise_conteudo(self):
 
                         _, ext = os.path.splitext(nome_arquivo_url)
                         ext = ext[1:].lower()
-
                         extensoes_total[ext] += 1
 
                         if ext in extensoes_desejadas:
                             contagem[ext] += 1
-                            tamanho_total[ext] += 0  # sem uso por enquanto
                             bucket_host = urlparse(url).netloc
-
                             if "s3" in bucket_host:
                                 provedor = "s3"
                             elif "storage" in bucket_host:
@@ -76,7 +91,6 @@ def analise_conteudo(self):
                                 provedor = "desconhecido"
 
                             buckets[(bucket_host, provedor)][ext] += 1
-                            buckets[(bucket_host, provedor)]["tamanho"] += 0
 
             os.makedirs(pasta_resultado, exist_ok=True)
 
@@ -88,8 +102,7 @@ def analise_conteudo(self):
                 for (bucket, provedor), dados in buckets.items():
                     f.write(f"{bucket} - provedor {provedor}:\n")
                     for ext, count in dados.items():
-                        if ext != "tamanho":
-                            f.write(f"  {ext}: {count} arquivos\n")
+                        f.write(f"  {ext}: {count} arquivos\n")
 
             with open(caminho_extensoes, "w", encoding="utf-8") as f:
                 f.write("Contagem de extensões encontradas:\n\n")
@@ -108,3 +121,26 @@ def analise_conteudo(self):
             print(f"   ↳ {caminho_extensoes}")
 
     print("✅ Análise de conteúdo dos buckets finalizada.")
+
+def main():
+    parser = argparse.ArgumentParser(description="🔍 Análise de conteúdo dos arquivos públicos")
+    parser.add_argument("--config", required=True, help="Caminho para o arquivo config.json")
+    args = parser.parse_args()
+
+    if not os.path.exists(args.config):
+        print(f"❌ Arquivo de configuração não encontrado: {args.config}")
+        sys.exit(1)
+
+    with open(args.config, "r", encoding="utf-8") as f:
+        config = json.load(f)
+
+    nome_modelo = config.get("modelo")
+    if not nome_modelo:
+        print("❌ Campo 'modelo' ausente no config.json")
+        sys.exit(1)
+
+    modelo = carregar_modelo(nome_modelo, config)
+    executar_analise_conteudo(modelo)
+
+if __name__ == "__main__":
+    main()
