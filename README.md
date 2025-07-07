@@ -1,2 +1,0 @@
-# Getbucket
-Ferramenta modular para geração e validaçõa de nomes de buckets em nuvem com modelos generativos modernos. GENBUCKET suporta LSTM, Transformer e GPT, treinados com conjuntos de dados personalizáveis para capturar diferentes padrões de nomeação. A ferramenta gera automaticamente nomes candidatos, verifica suas existências via DNS, classifica-os via HTTP e analisa buckets públicos em busca de vulnerabilidades. 
