@@ -1,0 +1,28 @@
+{
+  "modelo": "transformer",
+  "dataset_path": "dados/buckets.txt",
+  "validar_buckets": true,
+  "verificar_publicos": true,
+  "analisar_publicos": true,
+  "interface_grafica": false,
+  "modo_automatico": true,
+
+  "ultimo_bucket": 0,
+  "ultima_fase": 1,
+  "output_dir": "Resultados/transformer/modelo_Treinado",
+  "prompt_dir": "resultados/transformer/prompts",
+  "catalogados_dir": "resultados/transformer/catalogados",
+
+  "batch_size": 128,
+  "block_size": 32,
+  "max_iters": 5000,
+  "eval_interval": 500,
+  "learning_rate": 0.0001,
+  "eval_iters": 200,
+  "n_embd": 128,
+  "n_head": 6,
+  "n_layer": 4,
+  "dropout": 0.3,
+  "num_buckets": 100000,
+  "buckets_per_file": 10000
+}

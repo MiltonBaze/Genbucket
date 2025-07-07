@@ -1,0 +1,24 @@
+{
+  "modelo": "gpt-neo",
+  "dataset_path": "dados/buckets.txt",
+  "model_name": "EleutherAI/gpt-neo-125M",
+  "block_size": 128,
+  "num_train_epochs": 3,
+  "per_device_train_batch_size": 4,
+  "treinamento_dir": "Resultados/gptneo/treinamento",
+  "modelo_treinado_dir": "Resultados/gptneo/modelos_treinados",
+  "prompt_dir": "resultados/gptneo/prompts",
+  "catalogados_dir": "resultados/gptneo/catalogados",
+  "versao_validacao": 1,
+  "ultima_fase": 1,
+  "ultimo_bucket": 0,
+  "geracao": {
+    "max_length": 32,
+    "num_return_sequences": 3,
+    "no_repeat_ngram_size": 2,
+    "do_sample": true,
+    "top_k": 1000,
+    "top_p": 0.85,
+    "temperature": 1.0
+  }
+}
