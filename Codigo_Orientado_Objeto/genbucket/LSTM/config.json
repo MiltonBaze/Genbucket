@@ -1,7 +1,0 @@
-{
-  "unidades": 64,
-  "epocas": 200,
-  "taxa_aprendizagem": 0.001,
-  "tamanho_conjunto_teste": 0.2,
-  "aleatoriedade_divisao": 23
-}
