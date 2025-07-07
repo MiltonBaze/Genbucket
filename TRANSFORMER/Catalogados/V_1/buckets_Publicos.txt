@@ -1,5 +1,0 @@
-hlco--> https://hlco.storage.googleapis.com
-onra--> https://onra.storage.googleapis.com
-othe--> https://othe.storage.googleapis.com
-zrel--> https://zrel.s3.amazonaws.com
-sroo--> https://sroo.storage.googleapis.com
