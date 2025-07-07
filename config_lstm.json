@@ -1,6 +1,0 @@
-{
-  "dataset_path": "dados/buckets.txt",
-  "modelo": "LSTM",
-  "validar_buckets": true,
-  "modo_automatico": true
-}
