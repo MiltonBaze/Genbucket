@@ -1,9 +1,0 @@
-{
-  "block_size": 64,
-  "num_train_epochs": 30,
-  "per_device_train_batch_size": 4,
-  "model_name": "EleutherAI/gpt-neo-125M",
-  "prompt_dir": "Prompt",
-  "treinamento_dir": "Treinamentos",
-  "modelo_treinado_dir": "ModelosTreinados"
-}

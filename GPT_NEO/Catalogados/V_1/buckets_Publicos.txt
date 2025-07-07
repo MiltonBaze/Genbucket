@@ -1,2 +1,0 @@
-tem--> https://tem.s3.amazonaws.com
-zrel--> https://zrel.s3.amazonaws.com
