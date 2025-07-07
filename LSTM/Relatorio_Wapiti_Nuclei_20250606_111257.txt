@@ -1,8 +1,0 @@
- Bucket: anemia.s3.amazonaws.com
-  ✅ Wapiti: LSTM\Catalogados\relatorios\anemia_s3_amazonaws_com_wapiti.html
-  ✅ Nuclei: nuclei_anemia_s3_amazonaws_com.txt
-
- Bucket: arba.s3.amazonaws.com
-  ✅ Wapiti: LSTM\Catalogados\relatorios\arba_s3_amazonaws_com_wapiti.html
-  ✅ Nuclei: nuclei_arba_s3_amazonaws_com.txt
-
