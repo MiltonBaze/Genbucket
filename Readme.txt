@@ -15,12 +15,9 @@ python executores/validador.py --modelo lstm --versao all
 
 ----------------------------------------------------
 verificar buckets publicos
-python executores/verificar_buckets_publicos.py --modelo gpt-neo
+python executores/verificar_buckets_publicos.py --config config_gpt.json
+python executores/verificar_buckets_publicos.py --config config_lstm.json
+------------------------------------------------------------------------------
 
-----------------------------------------------------------
-Analise de vulnerabilidades V1 - Wapiti - Nuclei openSource 
-python executores/analisar_vulnerabilidades.py --config config_lstm.json
-python executores/analisar_vulnerabilidades.py --config config_gpt.json
-python executores/analisar_vulnerabilidades.py --config config_transformer.json
-
+python executores/analisar_vulnerabilidades_api.py --config config_gpt.jso
 
