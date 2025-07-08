@@ -6,25 +6,11 @@ import re
 from urllib.parse import urlparse
 from collections import defaultdict, Counter
 
-# Garante que o diretório raiz esteja no sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-def carregar_modelo(nome_modelo: str, config: dict):
-    if nome_modelo == "gpt-neo":
-        from modelos.gptneo.gpt_neo_model import GPTNeoModel
-        return GPTNeoModel(config)
-    elif nome_modelo == "lstm":
-        from modelos.lstm.lstm_model import LSTMModel
-        return LSTMModel(config)
-    elif nome_modelo == "transformer":
-        from modelos.transformer.transformer_model import TransformerModel
-        return TransformerModel(config)
-    else:
-        raise ValueError(f"Modelo desconhecido: {nome_modelo}")
-
-def executar_analise_conteudo(modelo):
-    catalogados_dir = modelo.catalogados_dir
-    modelo_nome = modelo.config.get("modelo", "desconhecido")
+def executar_analise_conteudo(config):
+    catalogados_dir = config.get("catalogados_dir")
+    modelo_nome = config.get("modelo", "desconhecido")
 
     print(f"🔍 Iniciando análise de conteúdo dos buckets ({modelo_nome})...")
 
@@ -33,7 +19,7 @@ def executar_analise_conteudo(modelo):
         "json", "html", "php", "asp", "aspx", "jsp", "svg"
     }
 
-    if not os.path.isdir(catalogados_dir):
+    if not catalogados_dir or not os.path.isdir(catalogados_dir):
         print(f"❌ Diretório não encontrado: {catalogados_dir}")
         return
 
@@ -134,13 +120,7 @@ def main():
     with open(args.config, "r", encoding="utf-8") as f:
         config = json.load(f)
 
-    nome_modelo = config.get("modelo")
-    if not nome_modelo:
-        print("❌ Campo 'modelo' ausente no config.json")
-        sys.exit(1)
-
-    modelo = carregar_modelo(nome_modelo, config)
-    executar_analise_conteudo(modelo)
+    executar_analise_conteudo(config)
 
 if __name__ == "__main__":
     main()
