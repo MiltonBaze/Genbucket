@@ -20,3 +20,11 @@ class BaseModel(ABC):
     @abstractmethod
     def analise_conteudo(self):
         pass
+    
+    @abstractmethod
+    def analisar_vulnerabilidades(config):
+        pass
+    
+    @abstractmethod
+    def analisar_vulnerabilidades(config):
+        pass
