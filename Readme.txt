@@ -1,42 +1,50 @@
-
-python main.py
+Maneira individualizada 
 ------------------------------------------------------------------
-Maneira individualizada
-validar dataset(Opcional)
+1 - Validar dataset(Opcional)
 python executores/validador_dataset.py dados/buckets.txt
 ---------------------------------------------------------------------
-treinar
+2 - Treinamento
 python executores/treinamento.py --config config_lstm.json --dataset dados/buckets_validado.txt
 python executores/treinamento.py --config config_gpt.json --dataset dados/buckets_validado.txt
 python executores/treinamento.py --config config_transformer.json --dataset dados/buckets_validado.txt
 ------------------------------------------------------------------
-Gerar nomes de Buckets pelos modelos
+3 - Gerar nomes de Buckets pelos modelos
 python executores/gerar.py --config config_lstm.json
 python executores/gerar.py --config config_gpt.json
 python executores/gerar.py --config config_transformer.json
 
 ----------------------------------------------------------------
-Validar nomes de buckets gerados pelos modelos nos provedores
-python executores/validar.py --modelo lstm --versao 1
-python executores/validar.py --modelo gptneo --versao 1
-python executores/validar.py --modelo transformer --versao 1
+4 - Validar nomes de buckets gerados pelos modelos nos provedores
+python executores/validar.py --modelo lstm --versao 1 ou 2 ou 3...10
+python executores/validar.py --modelo gptneo --versao 1 ou 2 ou 3...10
+python executores/validar.py --modelo transformer --versao 1 ou 2 ou 3...10
+
 python executores/validar.py --modelo lstm --versao all
 
 ----------------------------------------------------
-Verificar buckets publicos e privados e separa-los
+5 - Verificar buckets publicos e privados e separa-los
 python executores/verificar_buckets_publicos.py  --config config_gpt.json
 python executores/verificar_buckets_publicos.py  --config config_lstm.json
 python executores/verificar_buckets_publicos.py  --config config_transformer.json
 ----------------------------------------------------------------------------------
-Analise_conteudo encontrados nos buckets publicos
+6 - Analise_conteudo encontrados nos buckets publicos
 python executores/analise_conteudo.py --config config_gpt.json
 python executores/analise_conteudo.py --config config_lstm.json
 python executores/analise_conteudo.py --config config_transformer.json
+python executores/analise_conteudo.py --config config_lstm.json
 
 ----------------------------------------------------------
-Analise de vulnerabilidades nos buckets publicos V1 - Wapiti - Nuclei openSource 
-python executores/analisar_vulnerabilidades.py --config config_lstm.json
-python executores/analisar_vulnerabilidades.py --config config_gpt.json
-python executores/analisar_vulnerabilidades.py --config config_transformer.json
+7 - Analise de vulnerabilidades nos buckets publicos V1 - Wapiti - Nuclei openSource 
+python executores/analise_vulnerabilidades_v1.py --config config_lstm.json
+python executores/analisar_vulnerabilidades_v1.py --config config_gpt.json
+python executores/analisar_vulnerabilidades_v1.py --config config_transformer.json
+
+---------------------------------------------------------------------------------------
+8 - Analise de vulnerabilidades nos buckets publicos V2 - Qualys - Nessus pro 
+
+python executores/analise_vulnerabilidades_v2.py --config config_lstm.json
+python executores/analisar_vulnerabilidades_v2.py --config config_gpt.json
+python executores/analisar_vulnerabilidades_v2.py --config config_transformer.json
+
 
 
