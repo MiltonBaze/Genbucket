@@ -20,18 +20,18 @@ python main.py --acao 5 --config config_gpt.json     # Separa os buckets publico
 python main.py --acao 6 --config config_gpt.json     # analise_conteudo dos buckets públicos
 python main.py --acao 7 --config config_gpt.json     # analise_vulnerabilidades dos objetos com programas externos(Wapiti/Nuclei open source)
 python main.py --acao 8 --config config_gpt.json     # analise_vulnerabilidades dos objetos com programas externos(Qualys/Nessus-Pro)
-python main.py --acao 9 --config config_gpt.json     # Executa pipeline completo Executa pipeline completo do programa
+python main.py --acao 9 --config config_gpt.json     # Executa pipeline completo
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 TRANSFORMER
-python main.py --acao 1 --config config_tra.json     # Valida o dataset
-python main.py --acao 2 --config config_gpt.json     # Treina o modelo
-python main.py --acao 3 --config config_gpt.json     # Gera Nomes Buckets
-python main.py --acao 4 --config config_gpt.json     # Valida os buckets gerados
-python main.py --acao 5 --config config_gpt.json     # Separa os buckets publicos e privados
-python main.py --acao 6 --config config_gpt.json     # analise_conteudo dos buckets públicos
-python main.py --acao 7 --config config_gpt.json     # analise_vulnerabilidades dos objetos com programas externos(Wapiti/Nuclei open source)
-python main.py --acao 8 --config config_gpt.json     # analise_vulnerabilidades dos objetos com programas externos(Qualys/Nessus-Pro)
-python main.py --acao 9 --config config_gpt.json     # Executa pipeline completo Executa pipeline completo do programa
+python main.py --acao 1 --config config_transformer.json     # Valida o dataset
+python main.py --acao 2 --config config_transformer.json     # Treina o modelo
+python main.py --acao 3 --config config_transformer.json     # Gera Nomes Buckets
+python main.py --acao 4 --config config_transformer.json     # Valida os buckets gerados
+python main.py --acao 5 --config config_transformer.json     # Separa os buckets publicos e privados
+python main.py --acao 6 --config config_transformer.json     # analise_conteudo dos buckets públicos
+python main.py --acao 7 --config config_transformer.json     # analise_vulnerabilidades dos objetos com programas externos(Wapiti/Nuclei open source)
+python main.py --acao 8 --config config_transformer.json     # analise_vulnerabilidades dos objetos com programas externos(Qualys/Nessus-Pro)
+python main.py --acao 9 --config config_transformer.json     # Executa pipeline completo 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Maneira individualizada 
