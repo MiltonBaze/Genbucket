@@ -1,6 +1,7 @@
 {
-  "modelo": "gpt-neo",
-  "dataset_path": "dados/buckets.txt",
+  "modelo": "gptneo",
+  "dataset": "dados/buckets.txt",
+  "dataset_path": "dados/buckets_validado.txt",
   "model_name": "EleutherAI/gpt-neo-125M",
   "block_size": 128,
   "num_train_epochs": 3,
@@ -9,9 +10,24 @@
   "modelo_treinado_dir": "Resultados/gptneo/modelos_treinados",
   "prompt_dir": "resultados/gptneo/prompts",
   "catalogados_dir": "resultados/gptneo/catalogados",
-  "versao_validacao": 1,
+  "relatorio_conteudo_dir": "Resultados/gptneo/RelatoriosConteudo",
+  "wapiti_path": "tools/wapiti.exe",
+  "nuclei_path": "tools/nuclei.exe",
+  "validar_versoes": "all",
   "ultima_fase": 1,
   "ultimo_bucket": 0,
+
+  "comandos": {
+    "1": "python executores/validador_dataset.py --config CONFIG",
+    "2": "python executores/treinamento.py --config CONFIG --dataset DATASET",
+    "3": "python executores/gerar.py --config CONFIG",
+    "4": "python executores/validar.py --config CONFIG",
+    "5": "python executores/verificar_buckets_publicos.py --config CONFIG",
+    "6": "python executores/analise_conteudo.py --config CONFIG",
+    "7": "python executores/analise_vulnerabilidades_v1.py --config CONFIG",
+    "8": "python executores/analise_vulnerabilidades_v2.py --config CONFIG"
+  },
+  
   "geracao": {
     "max_length": 32,
     "num_return_sequences": 3,
@@ -20,5 +36,16 @@
     "top_k": 1000,
     "top_p": 0.85,
     "temperature": 1.0
+  },
+   "nessus": {
+    "host": "https://localhost:8834",
+    "username": "seu_usuario",
+    "password": "sua_senha"
+  },
+   "qualys": {
+    "host": "https://qualysapi.qualys.com",
+    "username": "seu_usuario_qualys",
+    "password": "sua_senha_qualys"
   }
+
 }

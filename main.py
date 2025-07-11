@@ -1,44 +1,54 @@
-from executores import ( validador_dataset, 
-    treinamento, gerar, Validar,
-    verificar_buckets_publicos,
-    analise_conteudo,
-    analise_vulnerabilidade_v1
-)
-
+import argparse
+import os
 import sys
+import json
 
-def executar_pipeline(config_path):
+def carregar_config(caminho_config):
+    if not os.path.exists(caminho_config):
+        print(f"❌ Arquivo de configuração não encontrado: {caminho_config}")
+        sys.exit(1)
+    with open(caminho_config, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def substituir_variaveis(comando, config_path, config):
+    return (
+        comando.replace("CONFIG", config_path)
+               .replace("DATASET", config.get("dataset_path", ""))
+               .replace("MODELO", config.get("modelo", ""))
+               .replace("VERSAO", str(config.get("validar_versoes", "all")))
+    )
+
+def executar_comando(codigo, config_path, config):
+    comandos_json = config.get("comandos", {})
     
-    sys.argv = ["", "--config", config_path]
+    if codigo == 9:
+        print("▶ Executando pipeline completo...")
+        for i in range(1, 9):
+            cmd_str = comandos_json.get(str(i))
+            if cmd_str:
+                cmd = substituir_variaveis(cmd_str, config_path, config)
+                print(f"\n🟢 Etapa {i}: {cmd}")
+                os.system(cmd)
+            else:
+                print(f"⚠️ Comando {i} não definido no JSON.")
+    else:
+        cmd_str = comandos_json.get(str(codigo))
+        if not cmd_str:
+            print(f"❌ Comando {codigo} não definido no JSON.")
+            return
+        cmd = substituir_variaveis(cmd_str, config_path, config)
+        print(f"▶ Executando: {cmd}")
+        os.system(cmd)
 
-    print(f"\n📦 Rodando pipeline para: {config_path}")
+def main():
+    parser = argparse.ArgumentParser(description="Executor GenBucket via parâmetros.")
+    parser.add_argument("--acao", type=int, required=True, help="Código da ação a ser executada (1-9)")
+    parser.add_argument("--config", type=str, required=True, help="Caminho para o arquivo config.json")
+    global args
+    args = parser.parse_args()
 
-    print("🚀 Validar Dataset...")
-    validador_dataset.main()
-    
-    print("🚀 Treinando...")
-    treinamento.main()
-
-    print("🧠 Gerando nomes...")
-    gerar.main()
-
-    print("✅ Validando nomes...")
-    Validar.main()
-
-    print("🌐 Verificando buckets públicos...")
-    verificar_buckets_publicos.main()
-
-    print("📂 Analisando conteúdo dos buckets...")
-    analise_conteudo.main()
-
-    print("🛡️ Analisando vulnerabilidades...")
-    analise_vulnerabilidade_v1.main()
-
-    print(f"🎉 Finalizado: {config_path}\n" + "="*60)
-
+    config = carregar_config(args.config)
+    executar_comando(args.acao, args.config, config)
 
 if __name__ == "__main__":
-    # Rode para múltiplos modelos:
-    executar_pipeline("config_lstm.json")
-    executar_pipeline("config_gptneo.json")
-    executar_pipeline("config_transformer.json")
+    main()

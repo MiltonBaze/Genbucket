@@ -1,17 +1,38 @@
 {
   "modelo": "transformer",
-  "dataset_path": "dados/buckets.txt",
-  "validar_buckets": true,
-  "verificar_publicos": true,
-  "analisar_publicos": true,
-  "interface_grafica": false,
-  "modo_automatico": true,
-
+  "dataset": "dados/buckets.txt",
+  "dataset_path": "dados/buckets_validado.txt",
   "ultimo_bucket": 0,
   "ultima_fase": 1,
+  "validar_versoes": "all",
   "output_dir": "Resultados/transformer/modelo_Treinado",
   "prompt_dir": "resultados/transformer/prompts",
   "catalogados_dir": "resultados/transformer/catalogados",
+  "relatorio_conteudo_dir": "Resultados/lstm/RelatoriosConteudo",
+  "wapiti_path": "tools/wapiti.exe",
+  "nuclei_path": "tools/nuclei.exe",
+
+    "comandos": {
+    "1": "python executores/validador_dataset.py --config CONFIG",
+    "2": "python executores/treinamento.py --config CONFIG --dataset DATASET",
+    "3": "python executores/gerar.py --config CONFIG",
+    "4": "python executores/validar.py --config CONFIG",
+    "5": "python executores/verificar_buckets_publicos.py --config CONFIG",
+    "6": "python executores/analise_conteudo.py --config CONFIG",
+    "7": "python executores/analise_vulnerabilidades_v1.py --config CONFIG",
+    "8": "python executores/analise_vulnerabilidades_v2.py --config CONFIG"
+  },
+
+  "nessus": {
+    "host": "https://localhost:8834",
+    "username": "seu_usuario",
+    "password": "sua_senha"
+   },
+  "qualys": {
+    "host": "https://qualysapi.qualys.com",
+    "username": "seu_usuario_qualys",
+    "password": "sua_senha_qualys"
+  },
 
   "batch_size": 128,
   "block_size": 32,
@@ -26,3 +47,4 @@
   "num_buckets": 100000,
   "buckets_per_file": 10000
 }
+  
