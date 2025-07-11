@@ -1,5 +1,6 @@
 import os
 import argparse
+import json
 import requests
 import SeparadorFuncoes as sep
 
@@ -65,23 +66,31 @@ def validar_buckets(prompt_dir, catalogados_dir, versao):
     sep.arqClose()
     print(f"✅ Validação da versão {versao} concluída.\n")
 
-
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description="Validador de buckets gerados por modelos.")
-    parser.add_argument("--modelo", required=True, help="Nome do modelo usado (ex: lstm, gpt, transformer)")
-    parser.add_argument("--versao", nargs="+", required=True,
-                        help="Versão(ões) da geração (ex: 1 2 3 ou 'all')")
-
+    parser.add_argument("--config", required=True, help="Caminho para o arquivo config.json")
     args = parser.parse_args()
 
-    prompt_dir = os.path.join("resultados", args.modelo, "prompts")
-    catalogados_dir = os.path.join("resultados", args.modelo, "catalogados")
+    if not os.path.exists(args.config):
+        print(f"❌ Arquivo de configuração não encontrado: {args.config}")
+        return
 
-    # Verifica se é 'all' ou lista de versões específicas
-    if "all" in args.versao:
+    with open(args.config, "r", encoding="utf-8") as f:
+        config = json.load(f)
+
+    modelo = config.get("modelo")
+    versoes_config = config.get("validar_versoes", "all")
+
+    prompt_dir = os.path.join("resultados", modelo, "prompts")
+    catalogados_dir = os.path.join("resultados", modelo, "catalogados")
+
+    if versoes_config == "all":
         versoes = list(range(1, 11))  # V1 até V10
     else:
-        versoes = [int(v) for v in args.versao]
+        versoes = versoes_config if isinstance(versoes_config, list) else [versoes_config]
 
     for v in versoes:
         validar_buckets(prompt_dir, catalogados_dir, v)
+
+if __name__ == "__main__":
+    main()

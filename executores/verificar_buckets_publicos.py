@@ -135,7 +135,7 @@ def verificar_buckets_publicos(config):
         print("\n⛔ Execução interrompida manualmente.")
     finally:
         driver.quit()
-        print("\n🔚 Processo finalizado.")
+        print("\n Processo finalizado.")
 
 def main():
     parser = argparse.ArgumentParser(description="🔍 Verifica buckets públicos e privados")

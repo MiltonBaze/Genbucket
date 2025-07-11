@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 def carregar_modelo(nome_modelo: str, config: dict):
-    if nome_modelo == "gpt-neo":
+    if nome_modelo == "gptneo":
         from modelos.gptneo.gpt_neo_model import GPTNeoModel
         return GPTNeoModel(config)
     elif nome_modelo == "lstm":
@@ -18,7 +18,7 @@ def carregar_modelo(nome_modelo: str, config: dict):
         from modelos.transformer.transformer_model import TransformerModel
         return TransformerModel(config)
     else:
-        raise ValueError(f"\ Modelo desconhecido: {nome_modelo}")
+        raise ValueError(f" Modelo desconhecido: {nome_modelo}")
 
 
 def gerar_texto_por_fases(modelo, config, prompt):
@@ -67,7 +67,7 @@ def gerar_texto_por_fases(modelo, config, prompt):
                             break
                 if contador >= 10000:
                     break
-    print(f"\ Geração finalizada. Total de palavras: {total_palavras}")
+    print(f" Geração finalizada. Total de palavras: {total_palavras}")
 
 
 if __name__ == "__main__":
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not os.path.exists(args.config):
-        print("\ Arquivo de configuração encontrado.")
+        print(" Arquivo de configuração encontrado.")
         sys.exit(1)
 
     with open(args.config, "r", encoding="utf-8") as f:
@@ -85,11 +85,11 @@ if __name__ == "__main__":
 
     nome_modelo = config.get("modelo")
     if not nome_modelo:
-        print("\ Modelo não especificado no config.json")
+        print(" Modelo não especificado no config.json")
         sys.exit(1)
 
-    print(f"\ Iniciando geração do modelo: {nome_modelo}...")
+    print(f" Iniciando geração do modelo: {nome_modelo}...")
     modelo = carregar_modelo(nome_modelo, config)
 
-    print("\ Iniciando geração de nomes de Buckets...")
+    print(" Iniciando geração de nomes de Buckets...")
     gerar_texto_por_fases(modelo, config, args.prompt)

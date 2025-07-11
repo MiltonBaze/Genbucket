@@ -1,8 +1,10 @@
-# validar_dataset.py
-
 import os
-import requests
+import sys
+import json
 import argparse
+import requests
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 class ValidadorDataset:
     def __init__(self, dataset_path: str, pasta_saida: str = "dados"):
@@ -51,12 +53,25 @@ class ValidadorDataset:
         print(f"📝 Arquivo salvo em: {saida_path}")
         return saida_path
 
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Valida um dataset de buckets.")
-    parser.add_argument("dataset", help="Caminho para o arquivo de entrada (ex: dados/buckets.txt)")
-    parser.add_argument("--saida", help="Pasta de saída (default: dados)", default="dados")
+def main():
+    parser = argparse.ArgumentParser(description="🧪 Validador de dataset de buckets")
+    parser.add_argument("--config", required=True, help="Caminho para o config.json")
     args = parser.parse_args()
 
-    validador = ValidadorDataset(args.dataset, args.saida)
+    if not os.path.exists(args.config):
+        print(f"❌ Arquivo de configuração não encontrado: {args.config}")
+        return
+
+    with open(args.config, "r", encoding="utf-8") as f:
+        config = json.load(f)
+
+    dataset_path = config.get("dataset")
+    if not dataset_path:
+        print("❌ Caminho para o dataset não encontrado no config.json (chave 'dataset')")
+        return
+
+    validador = ValidadorDataset(dataset_path, pasta_saida="dados")
     validador.validar()
+
+if __name__ == "__main__":
+    main()
