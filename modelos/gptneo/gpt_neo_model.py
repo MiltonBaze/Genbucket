@@ -38,7 +38,7 @@ class GPTNeoModel(BaseModel):
     def fit(self, dataset_path: str):
         model_name = self.config.get("model_name", "EleutherAI/gpt-neo-125M")
         block_size = self.config.get("block_size", 128)
-        num_train_epochs = self.config.get("epochs", 3)
+        num_train_epochs = self.config.get("epochs", 200)
         batch_size = self.config.get("batch_size", 4)
 
         treinamento_dir = self.config.get("treinamento_dir", "resultados/gptneo/treinamento")
@@ -59,12 +59,12 @@ class GPTNeoModel(BaseModel):
         os.makedirs(output_dir, exist_ok=True)
         os.makedirs(save_model, exist_ok=True)
 
-        print("📦 Carregando modelo e tokenizer...")
+        print(" Carregando modelo e tokenizer...")
         model = GPTNeoForCausalLM.from_pretrained(model_name)
         tokenizer = GPT2Tokenizer.from_pretrained(model_name)
         tokenizer.pad_token = tokenizer.eos_token
 
-        print(f"📄 Carregando dataset: {dataset_path}")
+        print(f" Carregando dataset: {dataset_path}")
         dataset = TextDataset(
             tokenizer=tokenizer,
             file_path=dataset_path,
@@ -86,7 +86,7 @@ class GPTNeoModel(BaseModel):
             logging_steps=100
         )
 
-        print("🚀 Iniciando treinamento...")
+        print(" Iniciando treinamento...")
         trainer = Trainer(
             model=model,
             args=args,
@@ -95,7 +95,7 @@ class GPTNeoModel(BaseModel):
         )
         trainer.train()
 
-        print(f"💾 Salvando modelo treinado em: {save_model}")
+        print(f" Salvando modelo treinado em: {save_model}")
         trainer.save_model(save_model)
         print("✅ Treinamento finalizado com sucesso.")
 
@@ -119,3 +119,15 @@ class GPTNeoModel(BaseModel):
         )
 
         return [self.tokenizer.decode(output, skip_special_tokens=True) for output in outputs]
+    
+    def validar_buckets(self, prompt_dir, catalogados_dir, versao):
+        print("⚠️ Método validar_buckets() ainda não implementado para GPTNeoModel.")
+        # Pode ser implementado futuramente se necessário
+
+    def verificar_buckets_publicos(self, config):
+        print("⚠️ Método verificar_buckets_publicos() ainda não implementado para GPTNeoModel.")
+        # Pode ser implementado futuramente se necessário
+
+    def analise_conteudo(self):
+        from executores.analise_conteudo import executar_analise_conteudo
+        executar_analise_conteudo(self)
