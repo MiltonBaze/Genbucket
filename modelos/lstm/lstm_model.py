@@ -20,11 +20,11 @@ class LSTMModel(BaseModel):
         os.makedirs(self.output_dir, exist_ok=True)
 
     def fit(self, dataset_path: str):
-        print("📚 Iniciando treinamento do modelo LSTM...")
+        print(" Iniciando treinamento do modelo LSTM...")
 
         # Lê os hiperparâmetros do config
         unidades = self.config.get("lstm_units", self.config.get("unidades", 64))
-        epocas = self.config.get("epochs", self.config.get("epocas", 20))
+        epocas = self.config.get("epochs", self.config.get("epocas", 200))
         taxa_aprendizado = self.config.get("learning_rate", self.config.get("taxa_aprendizagem", 0.001))
         tamanho_teste = self.config.get("test_size", self.config.get("tamanho_conjunto_teste", 0.2))
         random_state = self.config.get("random_state", self.config.get("aleatoriedade_divisao", 42))
