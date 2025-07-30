@@ -5,6 +5,8 @@ from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import LSTM, Dense, Embedding
 from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.optimizers import Adam
 from models.base_model import BaseModel
 
 
@@ -13,42 +15,41 @@ class LSTMModel(BaseModel):
         self.config = config
         self.model_dir = config.get("modelo_treinado_dir", "Result/lstm/models_training")
         self.tokenizer_path = os.path.join(self.model_dir, "tokenizer.json")
-        self.model_path = os.path.join(self.model_dir, "lstm_model.h5")
+        self.model_path = os.path.join(self.model_dir, "lstm_model.keras")
         self.max_len = self.config.get("max_len", 30)
         self.tokenizer = None
         self.model = None
 
     def fit(self, dataset_path: str):
-        # Etapa 1: Leitura e concatenação com separador \n
         with open(dataset_path, "r", encoding="utf-8") as f:
             nomes = [linha.strip().lower() for linha in f if linha.strip()]
-        
-        nomes = [n for n in nomes if 5 < len(n) <= self.max_len]
-        texto_unico = "\n".join(nomes)
 
-        # Tokenização a nível de caractere
-        tokenizer = Tokenizer(char_level=True, lower=True)
-        tokenizer.fit_on_texts([texto_unico])
-        total_seq = tokenizer.texts_to_sequences([texto_unico])[0]
+        tokenizer = Tokenizer(char_level=True)
+        tokenizer.fit_on_texts(nomes)
+        self.tokenizer = tokenizer
 
-        # Criação de sequências com janela deslizante
-        input_sequences = []
-        for i in range(1, len(total_seq)):
-            ngram = total_seq[:i + 1]
-            input_sequences.append(ngram)
+        sequencias = tokenizer.texts_to_sequences(nomes)
+        tamanho_max = max([len(seq) for seq in sequencias])
+        sequencias_uniformes = pad_sequences(sequencias, maxlen=tamanho_max, padding='post')
 
-        input_sequences = pad_sequences(input_sequences, maxlen=self.max_len, padding='pre')
-        X = input_sequences[:, :-1]
-        y = input_sequences[:, -1]
+        X = sequencias_uniformes[:, :-1]
+        y = sequencias_uniformes[:, 1:]
+
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=self.config.get("test_size", 0.2), random_state=self.config.get("random_state", 42)
+        )
+
         vocab_size = len(tokenizer.word_index) + 1
 
         model = Sequential()
-        model.add(Embedding(input_dim=vocab_size, output_dim=64, input_length=X.shape[1]))
-        model.add(LSTM(128))
+        model.add(Embedding(input_dim=vocab_size, output_dim=64))
+        model.add(LSTM(units=self.config.get("units", 64), return_sequences=True))
         model.add(Dense(vocab_size, activation='softmax'))
 
-        model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-        model.fit(X, y, batch_size=32, epochs=self.config.get("epochs", 20))
+        optimizer = Adam(learning_rate=self.config.get("learning_rate", 0.001))
+        model.compile(loss='sparse_categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+
+        model.fit(X_train, y_train, epochs=self.config.get("epochs", 100), validation_data=(X_test, y_test))
 
         os.makedirs(self.model_dir, exist_ok=True)
         model.save(self.model_path)
@@ -59,43 +60,31 @@ class LSTMModel(BaseModel):
         print(f"✅ Modelo salvo em: {self.model_path}")
         print(f"✅ Tokenizer salvo em: {self.tokenizer_path}")
 
-    def sample_with_temperature(self, preds, temperature=1.0):
-        preds = np.asarray(preds).astype('float64')
-        preds = np.log(preds + 1e-8) / temperature
-        exp_preds = np.exp(preds)
-        preds = exp_preds / np.sum(exp_preds)
-        return np.random.choice(len(preds), p=preds)
-
-    def predict(self, prompt: str = "", **kwargs):
-        from keras.utils import pad_sequences
-
-        max_len = self.config.get("max_len", 30)
-        temperature = kwargs.get("temperature", 0.8)
-        max_chars = kwargs.get("max_chars", 50)
-
+    def predict(self, prompt: str, max_chars=60):
         if not self.tokenizer:
             with open(self.tokenizer_path, "r", encoding="utf-8") as f:
-                tokenizer_json = json.dumps(json.load(f))
-                self.tokenizer = tokenizer_from_json(tokenizer_json)
+                self.tokenizer = tokenizer_from_json(f.read())
 
         if not self.model:
             self.model = load_model(self.model_path)
 
-        result = prompt.lower()
+        palavra_saida = prompt.lower()
         index_word = {v: k for k, v in self.tokenizer.word_index.items()}
-        word_index = self.tokenizer.word_index
 
-        for _ in range(max_chars):
-            seq = self.tokenizer.texts_to_sequences([result[-(max_len - 1):]])[0]
-            seq = pad_sequences([seq], maxlen=max_len - 1, padding="pre")
-            predicted = self.model.predict(seq, verbose=0)[0]
-            next_index = self.sample_with_temperature(predicted, temperature)
-            next_char = index_word.get(next_index)
+        while len(palavra_saida) < max_chars:
+            seq = self.tokenizer.texts_to_sequences([palavra_saida])[0]
+            seq = pad_sequences([seq], maxlen=self.max_len - 1, padding='post')
 
+            pred = self.model.predict(seq, verbose=0)
+            try:
+                proximo_indice = np.argmax(pred[0, len(palavra_saida) - 1, :])
+            except IndexError:
+                break
+
+            next_char = index_word.get(proximo_indice, '')
             if not next_char:
                 break
-            if next_char == "\n":
-                break
-            result += next_char
 
-        return [result.strip()]
+            palavra_saida += next_char
+
+        return [palavra_saida.strip()]
