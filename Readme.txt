@@ -4,28 +4,13 @@
 The tool automatically generates candidate names, verifies their existence via DNS, classifies them via HTTP, and analyzes public buckets for vulnerabilities.
 ---------------------------------------------------------------------------------------------------------------------------
 
-##  Installation
+##  Installation - Pynthon 3.10
 
 ### 1. Install the dependencies
 pip install -r requirements.txt
 
 ---------------------------------------------------------------------------------------------------------------------------
-## settings
-
-All parameters are set via config_[MODEL].json
-
-Exemplo:
-
-{
-  "model": "lstm",
-  "dataset_path": "data/dataset.txt",
-  "output_dir": "Result/LSTM/",
-  "num_return_sequences": 10,
-  "max_length": 60,
-  "temperature": 1.0
-}
-----------------------------------------------------------------------------------------------------------------------------
-External Requirements
+## 2.External Requirements
 
 Some tools are required outside of Python. 
 Install them manually:
@@ -44,6 +29,22 @@ https://github.com/projectdiscovery/nuclei/releases
 
 
 -------------------------------------------------------------------------------------------------------------------------------
+## 3 settings
+
+All parameters are set via config_[MODEL].json
+
+Exemplo:
+
+{
+  "model": "lstm",
+  "dataset_path": "data/dataset.txt",
+  "output_dir": "Result/LSTM/",
+  "num_return_sequences": 10,
+  "max_length": 60,
+  "temperature": 1.0
+}
+----------------------------------------------------------------------------------------------------------------------------
+
 ## How to use
 
 VIA main.py - (Parameters passed by config_model.json)
