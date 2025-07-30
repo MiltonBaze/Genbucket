@@ -2,7 +2,7 @@
 
 **GenBucket** is a modular tool for generating and validating cloud bucket names with modern generative models. GENBUCKET supports LSTM, Transformer, and GPT, trained with customizable datasets to capture different naming patterns.
 The tool automatically generates candidate names, verifies their existence via DNS, classifies them via HTTP, and analyzes public buckets for vulnerabilities.
----
+-------------------------------------------------------------------------------------------------------------------------------------------
 
 ##  Installation
 
