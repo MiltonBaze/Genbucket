@@ -1,0 +1,41 @@
+{
+  "model": "transformer",
+  "dataset": "data/todos_filtrados1.txt",
+  "dataset_path": "data/todos_filtrados1.txt",
+  "ultimo_bucket": 0,
+  "ultima_fase": 1,
+  "validar_versoes": "all",
+  "output_dir": "Result/transformer/model_training",
+  "prompt_dir": "result/transformer/prompts",
+  "modelo_treinado_dir": "Result/transformermodel_training",
+  "catalogados_dir": "Result/transformer/Cataloged",
+  "relatorio_conteudo_dir": "Result/transformer/Reports_content",
+  "wapiti_path": "tools/wapiti.exe",
+  "nuclei_path": "tools/nuclei.exe",
+
+  
+  "nessus": {
+    "host": "https://localhost:8834",
+    "username": "seu_usuario",
+    "password": "sua_senha"
+   },
+  "qualys": {
+    "host": "https://qualysapi.qualys.com",
+    "username": "seu_usuario_qualys",
+    "password": "sua_senha_qualys"
+  },
+
+  "batch_size": 128,
+  "block_size": 32,
+  "max_iters": 5000,
+  "eval_interval": 500,
+  "learning_rate": 0.0001,
+  "eval_iters": 200,
+  "n_embd": 128,
+  "n_head": 6,
+  "n_layer": 4,
+  "dropout": 0.3,
+  "num_buckets": 100000,
+  "buckets_per_file": 10000
+}
+  

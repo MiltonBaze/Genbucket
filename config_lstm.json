@@ -1,0 +1,31 @@
+{
+  "model": "lstm",
+  "dataset": "data/buckets.txt",
+  "dataset_path": "data/todos_filtrados1.txt",
+  "max_len": 30,
+  "lstm_units": 64,
+  "epochs": 200,
+  "learning_rate": 0.001,
+  "test_size": 0.2,
+  "random_state": 23,
+  "prompt_dir": "result/lstm/prompts",
+  "modelo_treinado_dir": "Result/lstm/model_training",
+  "catalogados_dir": "Result/lstm/Cataloged",
+  "relatorio_conteudo_dir": "Result/lstm/Reports_content",
+  "wapiti_path": "tools/wapiti.exe",
+  "nuclei_path": "tools/nuclei.exe",
+  "validar_versoes": "all",
+  "ultima_fase": 1,
+  "ultimo_bucket": 0,
+   
+  
+  "nessus": {
+    "host": "https://localhost:8834",
+    "username": "seu_usuario",
+    "password": "sua_senha"
+  },
+  "qualys": {
+    "host": "https://qualysapi.qualys.com",
+    "username": "seu_usuario_qualys",
+    "password": "sua_senha_qualys"}
+}
