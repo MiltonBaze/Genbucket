@@ -1,6 +1,6 @@
 {
   "model": "gptneo",
-  "dataset": "data/todos_filtrados1.txt",
+  "dataset": "data/buckets.txt",
   "dataset_path": "data/validated_buckets.txt",
   "model_name": "EleutherAI/gpt-neo-125M",
   "block_size": 128,
