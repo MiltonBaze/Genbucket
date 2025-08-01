@@ -1,7 +1,7 @@
 {
   "model": "gptneo",
-  "dataset": "data/buckets.txt",
-  "dataset_path": "data/todos_filtrados1.txt",
+  "dataset": "data/todos_filtrados1.txt",
+  "dataset_path": "data/validated_buckets.txt",
   "model_name": "EleutherAI/gpt-neo-125M",
   "block_size": 128,
   "num_train_epochs": 5,
@@ -23,8 +23,8 @@
     "no_repeat_ngram_size": 2,
     "do_sample": true,
     "top_k": 1000,
-    "top_p": 0.85,
-    "temperature": 0.3
+    "top_p": 0.9,
+    "temperature": 0.8
   },
    "nessus": {
     "host": "https://localhost:8834",

@@ -1,7 +1,7 @@
 {
   "model": "transformer",
-  "dataset": "data/todos_filtrados1.txt",
-  "dataset_path": "data/todos_filtrados1.txt",
+  "dataset": "data/buckets.txt",
+  "dataset_path": "data/validated_buckets.txt",
   "ultimo_bucket": 0,
   "ultima_fase": 1,
   "validar_versoes": "all",
