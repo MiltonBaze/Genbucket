@@ -174,7 +174,7 @@ class TransformerModel:
             loss.backward()
             optimizer.step()
 
-        output_dir = self.config.get("output_dir", "Resultados/transformer/modelo_Treinado")
+        output_dir = self.config.get("output_dir", "Result/transformer/model_training")
         os.makedirs(output_dir, exist_ok=True)
         torch.save(self.model.state_dict(), os.path.join(output_dir, "transformer_model.pth"))
         with open(os.path.join(output_dir, "vocab.json"), "w", encoding="utf-8") as f:
@@ -186,7 +186,7 @@ class TransformerModel:
 
     def predict(self, prompt: str, num_tokens=30):
         if self.model is None:
-            output_dir = self.config.get("output_dir", "Result/transformer/modelo_Treinado")
+            output_dir = self.config.get("output_dir", "Result/transformer/model_training")
             with open(os.path.join(output_dir, "vocab.json"), "r", encoding="utf-8") as f:
                 vocab = json.load(f)
                 self.chars = vocab["chars"]
