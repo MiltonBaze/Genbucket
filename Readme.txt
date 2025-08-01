@@ -4,7 +4,7 @@
 The tool automatically generates candidate names, verifies their existence via DNS, classifies them via HTTP, and analyzes public buckets for vulnerabilities.
 ---------------------------------------------------------------------------------------------------------------------------
 
-##  Installation - Pynthon 3.10
+##  Installation - Pynthon 3.14
 
 ### 1. Install the dependencies
 pip install -r requirements.txt
