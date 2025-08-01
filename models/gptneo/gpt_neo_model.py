@@ -52,7 +52,7 @@ class GPTNeoModel(BaseModel):
     def fit(self, dataset_path: str):
         model_name = self.config.get("model_name", "EleutherAI/gpt-neo-125M")
         block_size = self.config.get("block_size", 128)
-        num_train_epochs = self.config.get("epochs", 3)
+        num_train_epochs = self.config.get("epochs", 5)
         batch_size = self.config.get("batch_size", 4)
 
         training_dir = self.config.get("training_dir", "result/gptneo/training")
@@ -118,7 +118,7 @@ class GPTNeoModel(BaseModel):
     def predict(self, prompt: str, **kwargs):
         max_length = kwargs.get("max_length", 20)
         num_return_sequences = kwargs.get("num_return_sequences", 3)
-        temperature = kwargs.get("temperature", 0.3)
+        temperature = kwargs.get("temperature", 0.8)
         top_k = kwargs.get("top_k", 50)
         top_p = kwargs.get("top_p", 0.95)
 
