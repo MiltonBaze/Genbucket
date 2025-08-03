@@ -1,39 +1,54 @@
-#  GenBucket
+#  _GenBucket_
 
 **GenBucket** is a modular tool for generating and validating cloud bucket names with modern generative models. GENBUCKET supports LSTM, Transformer, and GPT, trained with customizable datasets to capture different naming patterns.
 The tool automatically generates candidate names, verifies their existence via DNS, classifies them via HTTP, and analyzes public buckets for vulnerabilities.
----------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
 
-##  Installation - Pynthon 3.14
+## 1. Installation - Pynthon 3.12
+------------------------------------------------------------------------------------------------------------------------------
 
-### 1. Install the dependencies
-pip install -r requirements.txt
+## 2. https://github.com/MiltonBaze/Genbucket
+   Code: Download ZIP: Genbucket-main.zip
 
----------------------------------------------------------------------------------------------------------------------------
-## 2.External Requirements
+------------------------------------------------------------------------------------------------------------------------------
+## 3. External Requirements
 
-Some tools are required outside of Python. 
-Install them manually:
+Folder: Tools: Unzip the 2 files: NUCLEI.rar e WAPITI.rar
 
-                     Tool                    Installation Instructions
-| Ambiente    | Nuclei                     | Wapiti                       |
-| ----------- | -------------------------- | ---------------------------- |
-| **Windows** | `tools/nuclei.exe`         | `tools/wapiti.exe`           |
-| **Linux**   | `tools/nuclei` (Linux bin) | tools/wapiti - Instalar via  |
-					   | `pip` ou script              |
+https://wapiti-scanner.github.io/
+https://github.com/wapiti-scanner/wapiti
+https://github.com/wapiti-scanner/wapiti/releases
+wapiti3-3.2.3-py3-none-any.whl
+wapiti3-3.2.3.tar.gz
+3.2.3.zip
 
-OBS:The Nuclei and Wapiti executables are located in the tools/ folder on Windows (as .exe) - you need to extract it.
-Wapiti pip install wapiti3 or download - git clone https://github.com/wapiti-scanner/wapiti
-Download Nuclei release and add it to your PATH.
+https://github.com/projectdiscovery/nuclei
 https://github.com/projectdiscovery/nuclei/releases
+nuclei_3.4.7_windows_amd64.zip
+------------------------------------------------------------------------------------------------------------------------------
+
+## 4. create and activate the project's virtual environment:
+
+python -m venv venv 
+
+source venv/bin/activate     # Linux/macOS
+venv\Scripts\activate        # Windows
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+## 5. Install the dependencies
+
+
+install : pip install -r requirements.txt
+install : pip install library_name
 
 
 -------------------------------------------------------------------------------------------------------------------------------
-## 3 settings
+## 6. settings
 
 All parameters are set via config_[MODEL].json
 
-Exemplo:
+Example:
 
 {
   "model": "lstm",
@@ -45,7 +60,7 @@ Exemplo:
 }
 ----------------------------------------------------------------------------------------------------------------------------
 
-## How to use
+## 7. How to use
 
 VIA main.py - (Parameters passed by config_model.json)
 Any changes to the model configuration must be made in config.json
