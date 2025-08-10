@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from torch.nn import functional as F
-from models.base_model import BaseModel
+from models.base_model import BaseModel  
 
 class Head(nn.Module):
     def __init__(self, n_embd, head_size, dropout, block_size):
@@ -95,11 +95,11 @@ class GPTLanguageModel(nn.Module):
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
         return logits, loss
 
-    def generate(self, idx, max_new_tokens):
+    def generate(self, idx, max_new_tokens, temperature=1.0):
         for _ in range(max_new_tokens):
             idx_cond = idx[:, -self.block_size:]
             logits, _ = self(idx_cond)
-            logits = logits[:, -1, :]
+            logits = logits[:, -1, :] / temperature   
             probs = F.softmax(logits, dim=-1)
             idx_next = torch.multinomial(probs, num_samples=1)
             idx = torch.cat((idx, idx_next), dim=1)
@@ -202,9 +202,11 @@ class TransformerModel:
             self.model.load_state_dict(torch.load(os.path.join(output_dir, "transformer_model.pth"), map_location=self.device))
             self.model.eval()
 
+        temperature = self.config.get("geracao", {}).get("temperature", 1.0) 
+
         encoded_prompt = torch.tensor([self.stoi.get(c, 0) for c in prompt], dtype=torch.long, device=self.device).unsqueeze(0)
         with torch.no_grad():
-            output_idx = self.model.generate(encoded_prompt, max_new_tokens=num_tokens)[0].tolist()
+            output_idx = self.model.generate(encoded_prompt, max_new_tokens=num_tokens, temperature=temperature)[0].tolist()
 
         generated_text = ''.join([self.itos.get(i, '') for i in output_idx])
         return [generated_text]
