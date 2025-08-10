@@ -17,6 +17,7 @@ class LSTMModel(BaseModel):
         self.tokenizer_path = os.path.join(self.model_dir, "tokenizer.json")
         self.model_path = os.path.join(self.model_dir, "lstm_model.keras")
         self.max_len = self.config.get("max_len", 30)
+        self.temperature = self.config.get("temperature", 1.0)  
         self.tokenizer = None
         self.model = None
 
@@ -36,7 +37,7 @@ class LSTMModel(BaseModel):
         y = sequencias_uniformes[:, 1:]
 
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=self.config.get("test_size", 0.2), random_state=self.config.get("random_state", 42)
+            X, y, test_size=self.config.get("test_size", 0.2), random_state=self.config.get("random_state", 23)
         )
 
         vocab_size = len(tokenizer.word_index) + 1
@@ -49,7 +50,7 @@ class LSTMModel(BaseModel):
         optimizer = Adam(learning_rate=self.config.get("learning_rate", 0.001))
         model.compile(loss='sparse_categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
-        model.fit(X_train, y_train, epochs=self.config.get("epochs", 100), validation_data=(X_test, y_test))
+        model.fit(X_train, y_train, epochs=self.config.get("epochs", 200), validation_data=(X_test, y_test))
 
         os.makedirs(self.model_dir, exist_ok=True)
         model.save(self.model_path)
@@ -76,9 +77,16 @@ class LSTMModel(BaseModel):
             seq = pad_sequences([seq], maxlen=self.max_len - 1, padding='post')
 
             pred = self.model.predict(seq, verbose=0)
+
             try:
-                proximo_indice = np.argmax(pred[0, len(palavra_saida) - 1, :])
-            except IndexError:
+                
+                probs = pred[0, len(palavra_saida) - 1, :]
+                probs = np.asarray(probs).astype('float64')
+                probs = np.log(probs + 1e-8) / self.temperature
+                exp_probs = np.exp(probs)
+                probs = exp_probs / np.sum(exp_probs)
+                proximo_indice = np.random.choice(len(probs), p=probs)
+            except (IndexError, ValueError):
                 break
 
             next_char = index_word.get(proximo_indice, '')
