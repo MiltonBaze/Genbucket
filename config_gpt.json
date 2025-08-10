@@ -24,7 +24,7 @@
     "do_sample": true,
     "top_k": 1000,
     "top_p": 0.9,
-    "temperature": 0.8
+    "temperature": 0.3
   },
    "nessus": {
     "host": "https://localhost:8834",

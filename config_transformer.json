@@ -36,6 +36,7 @@
   "n_layer": 4,
   "dropout": 0.3,
   "num_buckets": 100000,
-  "buckets_per_file": 10000
+  "buckets_per_file": 10000,
+  "temperature": 1.0
 }
   

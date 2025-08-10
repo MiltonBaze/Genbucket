@@ -8,6 +8,7 @@
   "learning_rate": 0.001,
   "test_size": 0.2,
   "random_state": 23,
+  "temperature": 1.0,
   "prompt_dir": "result/lstm/prompts",
   "modelo_treinado_dir": "Result/lstm/model_training",
   "catalogados_dir": "Result/lstm/Cataloged",
